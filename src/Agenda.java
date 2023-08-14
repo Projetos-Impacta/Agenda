@@ -6,11 +6,11 @@ import java.util.Scanner;
 
 public class Agenda {
     public static void main(String[] args) throws Exception {
+        Scanner Entrada = new Scanner(System.in);
         int escolha;
         List<String> tarefas = new ArrayList<>();
         Map<Integer, String> agenda = new HashMap<Integer, String>();
         do {
-            Scanner Entrada = new Scanner(System.in);
             System.out.println("\nBem vindo(a) a sua agenda");
             System.out.println("\nDigite o número da sua escolha:");
             System.out.println("1 - Visualzar suas tarefas");
@@ -36,16 +36,12 @@ public class Agenda {
                     adicionar(tarefas, agenda);
                     break;
                 case 3:
-                    
+                    excluir(tarefas, agenda);
                     break;
-
-                case 4:
-                    
-                    break;
-                }
-                Entrada.close();
+            }
         } while (true);
 
+        Entrada.close();
         System.out.println("\nAté logo! :)");
 
 
@@ -73,6 +69,19 @@ public class Agenda {
         String descricao = Entrada.nextLine();
         tarefas.add(descricao);
         System.out.println("\nTarefa adicionada com sucesso!");
+        Entrada.close();
+    }
+
+    public static void excluir(List<String> tarefas, Map<Integer, String> agenda) {
+        Scanner Entrada = new Scanner(System.in);
+        System.out.println("\nDigite o número tarefa que deseja excluir:");
+        Integer posicao = Entrada.nextInt()-1;
+        if (posicao >= 0 && posicao < tarefas.size()) {
+            tarefas.remove(posicao);
+            System.out.println("\nTarefa removida com sucesso!");
+        } else {
+            System.out.println("Posição inválida. Nenhum elemento foi removido.");
+        }
         Entrada.close();
     }
 }
