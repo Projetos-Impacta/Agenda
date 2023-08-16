@@ -1,15 +1,14 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Agenda {
-    public static void main(String[] args) throws Exception {
-        Scanner Entrada = new Scanner(System.in);
+    static Scanner Entrada = new Scanner(System.in);
+
+    public static void main(String[] args) {
         int escolha;
-        List<String> tarefas = new ArrayList<>();
         Map<Integer, String> agenda = new HashMap<Integer, String>();
+
         do {
             System.out.println("\nBem vindo(a) a sua agenda");
             System.out.println("\nDigite o número da sua escolha:");
@@ -22,21 +21,20 @@ public class Agenda {
 
             if (escolha == 0) {
                 break;
-            }
-            else if (escolha < 1 || escolha > 3) {
+            } else if (escolha < 1 || escolha > 3) {
                 System.out.println("\nOpção inválida. Tente novamente.");
                 continue;
             }
-            
+
             switch (escolha) {
                 case 1:
-                    visualizar(tarefas, agenda);
+                    visualizar(agenda);
                     break;
                 case 2:
-                    adicionar(tarefas, agenda);
+                    adicionar(agenda);
                     break;
                 case 3:
-                    excluir(tarefas, agenda);
+                    excluir(agenda);
                     break;
             }
         } while (true);
@@ -44,44 +42,51 @@ public class Agenda {
         Entrada.close();
         System.out.println("\nAté logo! :)");
 
-
     }
-    
-    public static void visualizar(List<String> tarefas, Map<Integer, String> agenda) {
-        if (tarefas.isEmpty()) {
+
+    public static void visualizar(Map<Integer, String> agenda) {
+        if (agenda.isEmpty()) {
             System.out.println("\nParece que não há nenhuma tarefa pendente. Muito bem!");
+            return;
         }
-        else{
-            for (String tarefa : tarefas) {
-                agenda.put(tarefas.indexOf(tarefa)+1, tarefa);
-            }
-            for (Map.Entry<Integer, String> entry : agenda.entrySet()) {
-                Integer chave = entry.getKey();
-                String valor = entry.getValue();
-                System.out.println(chave + " - " + valor);
-            }
+
+        for (Map.Entry<Integer, String> entry : agenda.entrySet()) {
+            Integer chave = entry.getKey();
+            String valor = entry.getValue();
+            System.out.println(chave + " - " + valor);
         }
     }
 
-    public static void adicionar(List<String> tarefas, Map<Integer, String> agenda) {
-        Scanner Entrada = new Scanner(System.in);
+    public static void adicionar(Map<Integer, String> agenda) {
+        Entrada = new Scanner(System.in);
+
         System.out.println("\nDigite a descrição da sua tarefa:");
         String descricao = Entrada.nextLine();
-        tarefas.add(descricao);
+        agenda.put(RecebeIdDisponivel(agenda), descricao);
         System.out.println("\nTarefa adicionada com sucesso!");
-        Entrada.close();
     }
 
-    public static void excluir(List<String> tarefas, Map<Integer, String> agenda) {
-        Scanner Entrada = new Scanner(System.in);
+    public static void excluir(Map<Integer, String> agenda) {
+        Entrada = new Scanner(System.in);
         System.out.println("\nDigite o número tarefa que deseja excluir:");
-        Integer posicao = Entrada.nextInt()-1;
-        if (posicao >= 0 && posicao < tarefas.size()) {
-            tarefas.remove(posicao);
-            System.out.println("\nTarefa removida com sucesso!");
-        } else {
-            System.out.println("Posição inválida. Nenhum elemento foi removido.");
+        int item = Entrada.nextInt();
+
+        if (!agenda.containsKey(item)) {
+            System.out.println("Tarefa inválida. Nenhum elemento foi removido.");
+            return;
         }
-        Entrada.close();
+        
+        agenda.remove(item);
+        System.out.println("\nTarefa removida com sucesso!");
+    }
+
+    private static Integer RecebeIdDisponivel(Map<Integer, String> agenda) {
+        int id = 1;
+
+        while (agenda.containsKey(id)) {
+            id++;
+        }
+        
+        return id;
     }
 }
